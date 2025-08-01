@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request, make_response, redirect, url_for
 import mysql.connector
 
-def mysql_init(usr, password):
+def mysql_init(usr, password, database):
     global mydb
     mydb = mysql.connector.connect(
       host="localhost",
       user=usr,
-      password=password
+      password=password,
+      database=database
     )
 
 app = Flask(__name__)
@@ -34,7 +35,6 @@ def index():
            resp.set_cookie('user', user)
            resp.set_cookie('pass', password)
            return resp
-           #return redirect(url_for('database'))
 
         except mysql.connector.errors.ProgrammingError as e:
            print(e)
@@ -48,7 +48,7 @@ def database():
     user_cookie = request.cookies.get('user')
     pass_cookie = request.cookies.get('pass')
     print(user_cookie, pass_cookie)
-    mysql_init(user_cookie, pass_cookie)
+    mysql_init(user_cookie, pass_cookie, '')
     mycursor = mydb.cursor()
     mycursor.execute("SHOW DATABASES")
 
@@ -58,15 +58,36 @@ def database():
         print(i[0])
 
     if request.method == 'POST':
-        selected = request.form.getlist('selected_items')
-        print("Ausgewählt:", selected)
-        return f"Du hast diese ID ausgewählt: {', '.join(selected)}"
+        database = request.form.getlist('selected_items')
+        print("Ausgewählt:", database[0])
+        #return f"Du hast diese ID ausgewählt: {', '.join(database)}"
+        # Send the selection to the next sides
+        resp = make_response(redirect(url_for('table')))
+        resp.set_cookie('selection', database[0])
+        return resp
 
     return render_template('database.html', mycursor=data)
 
 @app.route("/table", methods=["GET", "POST"])
 def table():
-    return render_template('table.html')
+    # Catch the Database selected
+    database_cookie = request.cookies.get('selection')
+    # Catch the User and Password from the Cookie
+    user_cookie = request.cookies.get('user')
+    pass_cookie = request.cookies.get('pass')
+    print(user_cookie, pass_cookie)
+
+    mysql_init(user_cookie, pass_cookie, database_cookie)
+    mycursor = mydb.cursor()
+    mycursor.execute("SHOW TABLES")
+
+    data = mycursor.fetchall()
+
+    for i in data:
+        print(i[0])
+    #print(database_cookie)
+
+    return render_template('table.html', database=database_cookie, table=data)
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
