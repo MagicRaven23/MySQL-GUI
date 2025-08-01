@@ -42,7 +42,7 @@ def index():
 
     return render_template('index.html')
 
-@app.route("/database")
+@app.route("/database", methods=["GET", "POST"])
 def database():
     # Catch the User and Password from the Cookie
     user_cookie = request.cookies.get('user')
@@ -53,12 +53,20 @@ def database():
     mycursor.execute("SHOW DATABASES")
 
     data = mycursor.fetchall()
-    print(data)
 
-    for i in mycursor:
-        print(i)
+    for i in data:
+        print(i[0])
+
+    if request.method == 'POST':
+        selected = request.form.getlist('selected_items')
+        print("Ausgewählt:", selected)
+        return f"Du hast diese ID ausgewählt: {', '.join(selected)}"
 
     return render_template('database.html', mycursor=data)
+
+@app.route("/table", methods=["GET", "POST"])
+def table():
+    return render_template('table.html')
 
 if __name__ == "__main__":
     app.run(port=8080, debug=True)

@@ -10,23 +10,20 @@
 <head>
 <body>
     <h1>Tabelle</h1>
-    <table>
-      <tr>
-        <th>Databases</th>
-        <th>Submit</th>
-
-      </tr>
-      {%for i in mycursor%}
-      <tr>
-        <td>{{i[0]}}</td>
-        <td>
-          <form action="{{ url_for("index") }}" method="post">
-          <input type="checkbox">
-        </td>
-      </tr>
-      {%endfor%}
-    </table>
-    <form action="{{ url_for("index") }}" method="post">
-    <input type="submit" name="submit" id="submit" value="Submit">
+    <form method="post">
+        <table>
+            <tr>
+                <th>Databases</th>
+                <th>Submit</th>
+            </tr>
+            {%for i in mycursor%}
+            <tr>
+                <td>{{i[0]}}</td>
+                <td><input type="radio" name="selected_items" value="{{ i[0] }}"></td>
+            </tr>
+            {%endfor%}
+        </table>
+        <button type="submit">Submit</button>
+    </form>
 </body>
 </html>
