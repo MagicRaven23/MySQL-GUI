@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+   <title>Table</title>
+</head>
+<body>
+   <h1>Table</h1>
+   <a href="/table">Back</a><br>
+   <a>Your Table is: {{table}}</a><br>
+   <form method="post">
+        <table>
+            <tr>
+            {%for i in fields%}
+                <th>{{i[0]}}</th>
+                {%endfor%}
+            </tr>
+            {% for i in colum%}
+            <tr>
+                {%for x in range(0, num)%}
+                <td>{{i[x]}}</td>
+                {%endfor%}
+               <!-- <td><input type="radio" name="selected_items" value="hello"></td>-->
+            </tr>
+            {%endfor%}
+        </table>
+        <!--<button type="submit">Submit</button>-->
+    </form>
+</body>
+</html>
