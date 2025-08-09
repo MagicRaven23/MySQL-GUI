@@ -2,12 +2,11 @@
 <html>
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-    <title>Datenbank</title>
+    <title>Lösche Datenbank</title>
 <head>
 <body>
-    <h1>Datenbank</h1>
-    <button type="button" onclick="window.location.href='{{ url_for( 'create_database') }}';">Neue Datenbank</button>
-    <button type="button" onclick="window.location.href='{{ url_for( 'delete_database') }}';">Lösche Datenbank</button><br><br>
+    <h1>Lösche Datenbank</h1>
+    <button type="button" onclick="window.location.href='{{ url_for( 'database') }}';">Back</button><br><br>
     <form method="post">
         <table>
             <tr>
@@ -17,11 +16,11 @@
             {%for i in mycursor%}
             <tr>
                 <td>{{i[0]}}</td>
-                <td><input type="radio" name="selected_items" value="{{ i[0] }}"></td>
+                <td><input type="checkbox" name="selected_items" value="{{ i[0] }}"></td>
             </tr>
             {%endfor%}
         </table><br>
-        <button type="submit">Submit</button>
+        <button type="submit">Delete</button>
     </form>
 </body>
 </html>

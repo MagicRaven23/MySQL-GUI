@@ -67,6 +67,54 @@ def database():
 
     return render_template('database.html', mycursor=data)
 
+@app.route("/create_database", methods=["GET", "POST"])
+def create_database():
+    if request.method == 'POST':
+        new_database = request.form.getlist('new_database')
+        print(new_database[0])
+
+        user_cookie = request.cookies.get('user')
+        pass_cookie = request.cookies.get('pass')
+        print(user_cookie, pass_cookie)
+        mysql_init(user_cookie, pass_cookie, ' ')
+        mycursor = mydb.cursor()
+        mycursor.execute(f"CREATE DATABASE {new_database[0]}")
+
+        return redirect(url_for('database'))
+
+    return render_template('create_database.html')
+
+@app.route("/delete_database", methods=["GET", "POST"])
+def delete_database():
+    # Catch the User and Password from the Cookie
+    user_cookie = request.cookies.get('user')
+    pass_cookie = request.cookies.get('pass')
+    print(user_cookie, pass_cookie)
+    mysql_init(user_cookie, pass_cookie, ' ')
+    mycursor = mydb.cursor()
+    mycursor.execute("SHOW DATABASES")
+
+    data = mycursor.fetchall()
+
+    print("Hello\n"*5)
+
+    if request.method == 'POST':
+        database = request.form.getlist('selected_items')
+        print("len", len(database))
+        for i in range(0, len(database)):
+            print("Ausgewählt:", database[i])
+        # Send the selection to the next sides
+
+        mysql_init(user_cookie, pass_cookie, ' ')
+        mycursor = mydb.cursor()
+        for i in range(0, len(database)):
+            mycursor.execute(f"DROP DATABASE {database[i]}")
+
+        return redirect(url_for('database'))
+
+
+    return render_template('delete_database.html', mycursor=data)
+
 @app.route("/table", methods=["GET", "POST"])
 def table():
     # Catch the Database selected

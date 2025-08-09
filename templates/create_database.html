@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Neue Datenbank</title>
+<head>
+<body>
+    <h1>Neue Datenbank</h1>
+    <div class="center">
+        <form method="post">
+            <label for="new_database">Name:</label><br>
+            <input type="text" id="new_database" name="new_database" placeholder="Neue Datenbank"><br><br>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</body>
+</html>
