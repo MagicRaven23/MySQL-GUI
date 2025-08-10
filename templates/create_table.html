@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MySQL Tabelle erstellen</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        function updateFields() {
+            const numFields = document.getElementById("num_fields").value;
+            const fieldsContainer = document.getElementById("fields_container");
+            fieldsContainer.innerHTML = "";
+
+            for (let i = 1; i <= numFields; i++) {
+                fieldsContainer.innerHTML += `
+                    <div>
+                        <label>Spalte ${i} Name:</label>
+                        <input type="text" name="col_name_${i}" id="fields" required>
+                        <label>Datentyp:</label>
+                        <select name="col_type_${i}" class="select">
+                            <option value="VARCHAR(255)">VARCHAR(255)</option>
+                            <option value="INT">INT</option>
+                            <option value="TEXT">TEXT</option>
+                            <option value="DATE">DATE</option>
+                            <option value="FLOAT">FLOAT</option>
+                        </select><br><br>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>MySQL Tabelle erstellen</h1>
+
+    {% if message %}
+        <p><strong>{{ message }}</strong></p>
+    {% endif %}
+
+    <form method="POST" id="table">
+        <label>Tabellenname:</label>
+        <input type="text" name="table_name" id="fields" required><br><br>
+
+        <label>Anzahl Spalten:</label>
+        <input type="range" id="num_fields" name="num_fields" min="1" max="10" value="1" oninput="updateFields()" required>
+        <span id="range_value">1</span>
+        <br><br>
+
+        <div id="fields_container"></div>
+
+        <button type="submit">Tabelle erstellen</button>
+    </form>
+
+    <script>
+        const rangeInput = document.getElementById("num_fields");
+        const rangeValue = document.getElementById("range_value");
+
+        rangeInput.addEventListener("input", function() {
+            rangeValue.textContent = this.value;
+            updateFields();
+        });
+
+        // Initial ein Feld anzeigen
+        updateFields();
+    </script>
+</body>
+</html>

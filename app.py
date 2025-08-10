@@ -177,5 +177,47 @@ def select(select):
 
     return render_template('select_table.html', table=select, fields=data_fields, colum=data, num=num)
 
+@app.route("/create_table", methods=["GET", "POST"])
+def create_table():
+    # Catch the Database selected
+    database_cookie = request.cookies.get('selection')
+
+    user_cookie = request.cookies.get('user')
+    pass_cookie = request.cookies.get('pass')
+    print(user_cookie, pass_cookie)
+
+    if request.method == 'POST':
+        table_name = request.form['table_name']
+        num_fields = int(request.form['num_fields'])
+
+        columns = []
+        for i in range(1, num_fields + 1):
+            col_name = request.form.get(f'col_name_{i}')
+            col_type = request.form.get(f'col_type_{i}')
+            if col_name and col_type:
+                columns.append(f"`{col_name}` {col_type}")
+
+        if table_name and columns:
+            mysql_init(user_cookie, pass_cookie, database_cookie)
+            cursor = mydb.cursor()
+
+            create_sql = f"CREATE TABLE `{table_name}` ({', '.join(columns)})"
+            try:
+                cursor.execute(create_sql)
+                mydb.commit()
+                message = f"Tabelle '{table_name}' erfolgreich erstellt!"
+            except mysql.connector.Error as err:
+                message = f"Fehler: {err}"
+            finally:
+                cursor.close()
+                mydb.close()
+                return redirect(url_for('table'))
+        else:
+            message = "Bitte alle Felder ausfüllen."
+
+        return render_template('create_table.html', message=message)
+
+    return render_template('create_table.html', message='')
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True)

@@ -27,7 +27,40 @@ tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
-input[type=text], [type=password] {
+#table {
+    text-align: center;
+    margin: 80px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.select {
+    padding: 16px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #f1f1f1;
+}
+
+.select:hover {
+    transition: all 0.1s ease 0s;
+}
+
+#fields {
+    color: rgb(36, 35, 42);
+    font-size: 16px;
+    line-height: 20px;
+    min-height: 28px;
+    border-radius: 4px;
+    padding: 8px 16px;
+    border: 2px solid transparent;
+    box-shadow: rgb(0 0 0 / 12%) 0px 1px 3px, rgb(0 0 0 / 24%) 0px 1px 2px;
+    background: rgb(251, 251, 251);
+    transition: all 0.1s ease 0s;
+}
+
+#password, #user, #new_database {
     width: 90%;
     color: rgb(36, 35, 42);
     font-size: 16px;
@@ -41,7 +74,7 @@ input[type=text], [type=password] {
     transition: all 0.1s ease 0s;
 }
 
-input[type=text]:focus, [type=password]:focus {
+#password:focus, #user:focus, #new_database:focus {
     border: 2px solid rgb(124, 138, 255);
 }
 
